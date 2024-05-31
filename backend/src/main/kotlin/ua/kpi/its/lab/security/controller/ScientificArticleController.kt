@@ -1,9 +1,9 @@
-package ua.kpi.its.lab.rest.controller
+package ua.kpi.its.lab.security.controller
 
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import ua.kpi.its.lab.security.dto.ScientificArticleRequestDto
-import ua.kpi.its.lab.security.dto.ScientificArticleResponseDtos
+import ua.kpi.its.lab.security.dto.ScientificArticleResponseDto
 import ua.kpi.its.lab.security.svc.ScientificArticleService
 import ua.kpi.its.lab.security.svc.MagazineService
 import ua.kpi.its.lab.security.entity.ScientificArticle
@@ -16,7 +16,7 @@ class ScientificArticleController(
 ) {
 
     @PostMapping
-    fun createArticle(@RequestBody requestDto: ScientificArticleRequestDto): ResponseEntity<ScientificArticleResponseDtos> {
+    fun createArticle(@RequestBody requestDto: ScientificArticleRequestDto): ResponseEntity<ScientificArticleResponseDto> {
         val magazine1 = magazine1.getById(requestDto.magazine1Id)
         if (magazine1 != null) {
             val article = articleService.create(
@@ -30,7 +30,7 @@ class ScientificArticleController(
                     magazine1 = magazine1
                 )
             )
-            val responseDto = ScientificArticleResponseDtos(
+            val responseDto = ScientificArticleResponseDto(
                 id = article.id,
                 title = article.title,
                 author = article.author,
@@ -47,10 +47,10 @@ class ScientificArticleController(
     }
 
     @GetMapping("/{id}")
-    fun getArticleById(@PathVariable id: Long): ResponseEntity<ScientificArticleResponseDtos> {
+    fun getArticleById(@PathVariable id: Long): ResponseEntity<ScientificArticleResponseDto> {
         val article = articleService.getById(id)
         return if (article != null) {
-            val responseDto = ScientificArticleResponseDtos(
+            val responseDto = ScientificArticleResponseDto(
                 id = article.id,
                 title = article.title,
                 author = article.author,
@@ -67,7 +67,7 @@ class ScientificArticleController(
     }
 
     @PutMapping("/{id}")
-    fun updateArticle(@PathVariable id: Long, @RequestBody requestDto: ScientificArticleRequestDto): ResponseEntity<ScientificArticleResponseDtos> {
+    fun updateArticle(@PathVariable id: Long, @RequestBody requestDto: ScientificArticleRequestDto): ResponseEntity<ScientificArticleResponseDto> {
         val magazine1 = magazine1.getById(requestDto.magazine1Id)
         if (magazine1 != null) {
             val article = articleService.update(
@@ -82,7 +82,7 @@ class ScientificArticleController(
                     magazine1 = magazine1
                 )
             )
-            val responseDto = ScientificArticleResponseDtos(
+            val responseDto = ScientificArticleResponseDto(
                 id = article.id,
                 title = article.title,
                 author = article.author,
@@ -105,9 +105,9 @@ class ScientificArticleController(
     }
 
     @GetMapping
-    fun getAllArticles(): ResponseEntity<List<ScientificArticleResponseDtos>> {
+    fun getAllArticles(): ResponseEntity<List<ScientificArticleResponseDto>> {
         val articles = articleService.getAll().map { article ->
-            ScientificArticleResponseDtos(
+            ScientificArticleResponseDto(
                 id = article.id,
                 title = article.title,
                 author = article.author,

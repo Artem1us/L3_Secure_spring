@@ -48,9 +48,18 @@ fun SoftScreen(
                 val response = client.get("http://localhost:8080/api/magazines") {
                     bearerAuth(token)
                 }
-                loading = false
-                response.body()
+                if (response.status.isSuccess()) {
+                    loading = false
+                    response.body() // Декодувати як масив об'єктів, якщо відповідь успішна
+                } else {
+                    // Обробити помилку, наприклад, вивести повідомлення про помилку
+                    val errorMessage = response.body<String>()
+                    loading = false
+                    snackbarHostState.showSnackbar(errorMessage)
+                    magazine1s // Повернути поточний стан magazine1s
+                }
             } catch (e: Exception) {
+                loading = false
                 val msg = e.toString()
                 snackbarHostState.showSnackbar(msg, withDismissAction = true, duration = SnackbarDuration.Indefinite)
                 magazine1s
@@ -100,13 +109,18 @@ fun SoftScreen(
                             scope.launch {
                                 withContext(Dispatchers.IO) {
                                     try {
-                                        val response = client.delete("http://localhost:8080/api/magazines/${magazine1.id}") {
-                                            bearerAuth(token)
-                                        }
+                                        val response =
+                                            client.delete("http://localhost:8080/api/magazines/${magazine1.id}") {
+                                                bearerAuth(token)
+                                            }
                                         require(response.status.isSuccess())
                                     } catch (e: Exception) {
                                         val msg = e.toString()
-                                        snackbarHostState.showSnackbar(msg, withDismissAction = true, duration = SnackbarDuration.Indefinite)
+                                        snackbarHostState.showSnackbar(
+                                            msg,
+                                            withDismissAction = true,
+                                            duration = SnackbarDuration.Indefinite
+                                        )
                                     }
                                 }
 
@@ -121,7 +135,11 @@ fun SoftScreen(
                                         response.body()
                                     } catch (e: Exception) {
                                         val msg = e.toString()
-                                        snackbarHostState.showSnackbar(msg, withDismissAction = true, duration = SnackbarDuration.Indefinite)
+                                        snackbarHostState.showSnackbar(
+                                            msg,
+                                            withDismissAction = true,
+                                            duration = SnackbarDuration.Indefinite
+                                        )
                                         magazine1s
                                     }
                                 }
@@ -143,7 +161,11 @@ fun SoftScreen(
                 },
                 onError = {
                     scope.launch {
-                        snackbarHostState.showSnackbar(it, withDismissAction = true, duration = SnackbarDuration.Indefinite)
+                        snackbarHostState.showSnackbar(
+                            it,
+                            withDismissAction = true,
+                            duration = SnackbarDuration.Indefinite
+                        )
                     }
                 },
                 onConfirm = {

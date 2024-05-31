@@ -1,4 +1,4 @@
-package ua.kpi.its.lab.rest.controller
+package ua.kpi.its.lab.security.controller
 
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -7,11 +7,11 @@ import ua.kpi.its.lab.security.svc.MagazineService
 import ua.kpi.its.lab.security.entity.Magazine
 
 @RestController
-@RequestMapping("/api/Magazines")
+@RequestMapping("/api/magazines")
 class MagazineController(private val magazine1: MagazineService) {
 
     @PostMapping
-    fun createMagazine(@RequestBody requestDto: MagazineRequestDtos): ResponseEntity<MagazineResponseDtos> {
+    fun createMagazine(@RequestBody requestDto: MagazineRequestDto): ResponseEntity<MagazineResponseDto> {
         val magazine = magazine1.create(
             Magazine(
                 name = requestDto.name,
@@ -23,7 +23,7 @@ class MagazineController(private val magazine1: MagazineService) {
                 periodicity = requestDto.periodicity
             )
         )
-        val responseDto = MagazineResponseDtos(
+        val responseDto = MagazineResponseDto(
             id = magazine.id,
             name = magazine.name,
             topic = magazine.topic,
@@ -37,10 +37,10 @@ class MagazineController(private val magazine1: MagazineService) {
     }
 
     @GetMapping("/{id}")
-    fun getMagazineById(@PathVariable id: Long): ResponseEntity<MagazineResponseDtos> {
+    fun getMagazineById(@PathVariable id: Long): ResponseEntity<MagazineResponseDto> {
         val magazine = magazine1.getById(id)
         return if (magazine != null) {
-            val responseDto = MagazineResponseDtos(
+            val responseDto = MagazineResponseDto(
                 id = magazine.id,
                 name = magazine.name,
                 topic = magazine.topic,
@@ -57,7 +57,7 @@ class MagazineController(private val magazine1: MagazineService) {
     }
 
     @PutMapping("/{id}")
-    fun updateMagazine(@PathVariable id: Long, @RequestBody requestDto: MagazineRequestDtos): ResponseEntity<MagazineResponseDtos> {
+    fun updateMagazine(@PathVariable id: Long, @RequestBody requestDto: MagazineRequestDto): ResponseEntity<MagazineResponseDto> {
         val magazine = magazine1.update(
             Magazine(
                 id = id,
@@ -70,7 +70,7 @@ class MagazineController(private val magazine1: MagazineService) {
                 periodicity = requestDto.periodicity
             )
         )
-        val responseDto = MagazineResponseDtos(
+        val responseDto = MagazineResponseDto(
             id = magazine.id,
             name = magazine.name,
             topic = magazine.topic,
@@ -90,9 +90,9 @@ class MagazineController(private val magazine1: MagazineService) {
     }
 
     @GetMapping
-    fun getAllMagazines(): ResponseEntity<List<MagazineResponseDtos>> {
+    fun getAllMagazines(): ResponseEntity<List<MagazineResponseDto>> {
         val magazines = magazine1.getAll().map { magazine ->
-            MagazineResponseDtos(
+            MagazineResponseDto(
                 id = magazine.id,
                 name = magazine.name,
                 topic = magazine.topic,

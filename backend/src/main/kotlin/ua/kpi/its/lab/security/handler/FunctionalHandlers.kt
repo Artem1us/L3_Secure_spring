@@ -1,4 +1,4 @@
-package ua.kpi.its.lab.rest.handler
+package ua.kpi.its.lab.security.handler
 
 import org.springframework.stereotype.Component
 import org.springframework.web.servlet.function.ServerRequest
