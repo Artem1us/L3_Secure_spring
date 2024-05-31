@@ -304,7 +304,7 @@ fun SoftwareItem(magazine1: MagazineResponseDto, onEdit: () -> Unit, onRemove: (
                 Text(magazine1.language)
             },
             supportingContent = {
-                Text("${magazine1.topic} - ${magazine1.issn} MB")
+                Text("${magazine1.topic} - ${magazine1.issn} ISSN")
             },
             trailingContent = {
                 Row(modifier = Modifier.padding(0.dp, 20.dp), verticalAlignment = Alignment.CenterVertically) {
