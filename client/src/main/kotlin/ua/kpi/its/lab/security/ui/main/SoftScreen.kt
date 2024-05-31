@@ -45,7 +45,7 @@ fun SoftScreen(
         delay(1000)
         magazine1s = withContext(Dispatchers.IO) {
             try {
-                val response = client.get("http://localhost:8080/api/products") {
+                val response = client.get("http://localhost:8080/api/magazines") {
                     bearerAuth(token)
                 }
                 loading = false
@@ -72,7 +72,7 @@ fun SoftScreen(
                     openDialog = true
                 },
                 content = {
-                    Icon(Icons.Filled.Add, "add software product")
+                    Icon(Icons.Filled.Add, "add magazine")
                 }
             )
         }
@@ -82,7 +82,7 @@ fun SoftScreen(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.Center
             ) {
-                Text("No software products to show", modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
+                Text("No magazines to show", modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
             }
         } else {
             LazyColumn(
@@ -100,7 +100,7 @@ fun SoftScreen(
                             scope.launch {
                                 withContext(Dispatchers.IO) {
                                     try {
-                                        val response = client.delete("http://localhost:8080/api/products/${magazine1.id}") {
+                                        val response = client.delete("http://localhost:8080/api/magazines/${magazine1.id}") {
                                             bearerAuth(token)
                                         }
                                         require(response.status.isSuccess())
@@ -114,7 +114,7 @@ fun SoftScreen(
 
                                 magazine1s = withContext(Dispatchers.IO) {
                                     try {
-                                        val response = client.get("http://localhost:8080/api/products") {
+                                        val response = client.get("http://localhost:8080/api/magazines") {
                                             bearerAuth(token)
                                         }
                                         loading = false
@@ -152,7 +152,7 @@ fun SoftScreen(
                     scope.launch {
                         magazine1s = withContext(Dispatchers.IO) {
                             try {
-                                val response = client.get("http://localhost:8080/api/products") {
+                                val response = client.get("http://localhost:8080/api/magazines") {
                                     bearerAuth(token)
                                 }
                                 loading = false
@@ -195,9 +195,9 @@ fun SoftwareDialog(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 if (magazine1 == null) {
-                    Text("Create Software Product")
+                    Text("Create Magazine")
                 } else {
-                    Text("Update Software Product")
+                    Text("Update Magazine")
                 }
 
                 HorizontalDivider()
@@ -238,13 +238,13 @@ fun SoftwareDialog(
                                         name, topic, language, establishDate, issn.toString(), price, periodicity
                                     )
                                     val response = if (magazine1 == null) {
-                                        client.post("http://localhost:8080/api/products") {
+                                        client.post("http://localhost:8080/api/magazines") {
                                             bearerAuth(token)
                                             setBody(request)
                                             contentType(ContentType.Application.Json)
                                         }
                                     } else {
-                                        client.put("http://localhost:8080/api/products/${magazine1.id}") {
+                                        client.put("http://localhost:8080/api/magazines/${magazine1.id}") {
                                             bearerAuth(token)
                                             setBody(request)
                                             contentType(ContentType.Application.Json)
